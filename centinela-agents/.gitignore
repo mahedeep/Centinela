@@ -10,8 +10,6 @@ data/*.db
 data/traces/*
 !data/traces/.gitkeep
 data/synthetic/*.json
-data/samples/*.png
-data/samples/*.pdf
 reports/*.md
 !reports/.gitkeep
 node_modules/
