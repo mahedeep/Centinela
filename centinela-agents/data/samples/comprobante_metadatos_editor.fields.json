@@ -1,0 +1,26 @@
+{
+  "document_type": "comprobante_domicilio",
+  "fields": {
+    "nombre": {
+      "value": "MARÍA FICTICIA PÉREZ DE PRUEBA",
+      "confidence": 0.93
+    },
+    "direccion": {
+      "value": "Calle Inventada 1234, Comuna Ejemplo",
+      "confidence": 0.91
+    },
+    "emisor": {
+      "value": "Luz del Valle S.A.",
+      "confidence": 0.95
+    },
+    "fecha_emision": {
+      "value": "03/08/2026",
+      "confidence": 0.92
+    },
+    "monto": {
+      "value": "$ 38.450",
+      "confidence": 0.9
+    }
+  },
+  "layout": "Encabezado del emisor arriba; datos del titular a la izquierda; montos a la derecha; tabla de detalle en el tercio inferior."
+}

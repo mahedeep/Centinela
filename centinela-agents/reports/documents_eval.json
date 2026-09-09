@@ -1,0 +1,212 @@
+[
+  {
+    "archivo": "cedula_ok.png",
+    "etiqueta": "autentico",
+    "esperado": "autentico",
+    "verdicto": "autentico",
+    "correcto": true,
+    "score": 0.0269,
+    "calidad": 0.96,
+    "tipo_detectado": "cedula",
+    "checks_fail": [],
+    "checks_warn": [],
+    "hallazgos": [],
+    "trace_id": "doc-efcb654d98634154",
+    "latency_ms": 51,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "comprobante_domicilio_ok.png",
+    "etiqueta": "autentico",
+    "esperado": "autentico",
+    "verdicto": "autentico",
+    "correcto": true,
+    "score": 0.0269,
+    "calidad": 0.96,
+    "tipo_detectado": "comprobante_domicilio",
+    "checks_fail": [],
+    "checks_warn": [],
+    "hallazgos": [],
+    "trace_id": "doc-9c1c80b23fef4b18",
+    "latency_ms": 49,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "contrato_ok.png",
+    "etiqueta": "autentico",
+    "esperado": "autentico",
+    "verdicto": "autentico",
+    "correcto": true,
+    "score": 0.0269,
+    "calidad": 0.96,
+    "tipo_detectado": "contrato",
+    "checks_fail": [],
+    "checks_warn": [],
+    "hallazgos": [],
+    "trace_id": "doc-f5349d9cbae24230",
+    "latency_ms": 43,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "liquidacion_ok.png",
+    "etiqueta": "autentico",
+    "esperado": "autentico",
+    "verdicto": "autentico",
+    "correcto": true,
+    "score": 0.0269,
+    "calidad": 0.96,
+    "tipo_detectado": "liquidacion",
+    "checks_fail": [],
+    "checks_warn": [],
+    "hallazgos": [],
+    "trace_id": "doc-c82d393412f14fbf",
+    "latency_ms": 46,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "poder_ok.png",
+    "etiqueta": "autentico",
+    "esperado": "autentico",
+    "verdicto": "autentico",
+    "correcto": true,
+    "score": 0.0269,
+    "calidad": 0.96,
+    "tipo_detectado": "poder",
+    "checks_fail": [],
+    "checks_warn": [],
+    "hallazgos": [],
+    "trace_id": "doc-a6f5fb93854640ab",
+    "latency_ms": 39,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "firma_referencia.png",
+    "etiqueta": "autentico",
+    "esperado": "autentico",
+    "verdicto": "autentico",
+    "correcto": true,
+    "score": 0.0269,
+    "calidad": 0.6546,
+    "tipo_detectado": "firma",
+    "checks_fail": [],
+    "checks_warn": [],
+    "hallazgos": [],
+    "trace_id": "doc-ae2aec1bd0104ee9",
+    "latency_ms": 12,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "cedula_alterada_fecha.png",
+    "etiqueta": "falso",
+    "esperado": "falso",
+    "verdicto": "falso",
+    "correcto": true,
+    "score": 0.9032,
+    "calidad": 0.96,
+    "tipo_detectado": "cedula",
+    "checks_fail": [
+      "date_consistency"
+    ],
+    "checks_warn": [],
+    "hallazgos": [
+      "typography_mismatch"
+    ],
+    "trace_id": "doc-61fde45a4cfe49a1",
+    "latency_ms": 45,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "cedula_rut_invalido.png",
+    "etiqueta": "falso",
+    "esperado": "sospechoso/falso",
+    "verdicto": "sospechoso",
+    "correcto": true,
+    "score": 0.4894,
+    "calidad": 0.96,
+    "tipo_detectado": "cedula",
+    "checks_fail": [
+      "rut_modulo_11"
+    ],
+    "checks_warn": [],
+    "hallazgos": [],
+    "trace_id": "doc-10da7538143149ad",
+    "latency_ms": 45,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "contrato_firma_pegada.png",
+    "etiqueta": "falso",
+    "esperado": "falso",
+    "verdicto": "falso",
+    "correcto": true,
+    "score": 0.8818,
+    "calidad": 0.96,
+    "tipo_detectado": "contrato",
+    "checks_fail": [
+      "signature_match"
+    ],
+    "checks_warn": [],
+    "hallazgos": [
+      "crop_border"
+    ],
+    "trace_id": "doc-c1a834396921442b",
+    "latency_ms": 43,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "liquidacion_montos_editados.png",
+    "etiqueta": "falso",
+    "esperado": "falso",
+    "verdicto": "falso",
+    "correcto": true,
+    "score": 0.8602,
+    "calidad": 0.96,
+    "tipo_detectado": "liquidacion",
+    "checks_fail": [
+      "arithmetic_consistency"
+    ],
+    "checks_warn": [],
+    "hallazgos": [
+      "digit_retouch"
+    ],
+    "trace_id": "doc-5f0a6a0e2a5e4d77",
+    "latency_ms": 46,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "comprobante_metadatos_editor.png",
+    "etiqueta": "falso",
+    "esperado": "sospechoso",
+    "verdicto": "sospechoso",
+    "correcto": true,
+    "score": 0.1194,
+    "calidad": 0.96,
+    "tipo_detectado": "comprobante_domicilio",
+    "checks_fail": [],
+    "checks_warn": [
+      "metadata_coherence"
+    ],
+    "hallazgos": [],
+    "trace_id": "doc-308481d86d2d4480",
+    "latency_ms": 50,
+    "cost_usd": 0.0
+  },
+  {
+    "archivo": "poder_texto_tipografia.png",
+    "etiqueta": "falso",
+    "esperado": "falso",
+    "verdicto": "falso",
+    "correcto": true,
+    "score": 0.43,
+    "calidad": 0.96,
+    "tipo_detectado": "poder",
+    "checks_fail": [],
+    "checks_warn": [],
+    "hallazgos": [
+      "inserted_text_block"
+    ],
+    "trace_id": "doc-18eefd17925b4b55",
+    "latency_ms": 42,
+    "cost_usd": 0.0
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "document_type": "firma",
+  "fields": {
+    "firmante": {
+      "value": "MARÍA FICTICIA PÉREZ DE PRUEBA",
+      "confidence": 0.86
+    }
+  },
+  "layout": "Firma manuscrita centrada sobre línea horizontal, sin otro contenido."
+}

@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+
+  /* Accesibilidad: foco siempre visible al navegar con teclado. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-petrol-500 ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm;
+  }
+
+  /* 44 px de alto mínimo: tamaño táctil accesible. */
+  .btn {
+    @apply inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg px-4
+           text-sm font-medium transition-colors disabled:cursor-not-allowed
+           disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply btn bg-petrol-700 text-white hover:bg-petrol-800;
+  }
+
+  .btn-secondary {
+    @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50;
+  }
+
+  .btn-ghost {
+    @apply btn text-petrol-700 hover:bg-petrol-50;
+  }
+
+  .field-label {
+    @apply mb-1 block text-sm font-medium text-slate-700;
+  }
+
+  .field-input {
+    @apply min-h-[44px] w-full rounded-lg border border-slate-300 bg-white px-3 text-sm
+           text-slate-900 placeholder:text-slate-400 focus:border-petrol-500;
+  }
+
+  .table-header {
+    @apply bg-slate-50 px-4 py-3 text-left text-xs font-semibold uppercase
+           tracking-wide text-slate-500;
+  }
+
+  .table-cell {
+    @apply border-t border-slate-100 px-4 py-3 text-sm text-slate-700;
+  }
+}

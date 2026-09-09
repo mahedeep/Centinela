@@ -1,0 +1,30 @@
+{
+  "document_type": "cedula",
+  "fields": {
+    "nombre": {
+      "value": "MARÍA FICTICIA PÉREZ DE PRUEBA",
+      "confidence": 0.95
+    },
+    "rut": {
+      "value": "12.345.678-5",
+      "confidence": 0.94
+    },
+    "fecha_nacimiento": {
+      "value": "12/03/1988",
+      "confidence": 0.93
+    },
+    "fecha_emision": {
+      "value": "05/01/2022",
+      "confidence": 0.92
+    },
+    "fecha_vencimiento": {
+      "value": "05/01/2021",
+      "confidence": 0.9
+    },
+    "numero_serie": {
+      "value": "A123456789",
+      "confidence": 0.88
+    }
+  },
+  "layout": "Encabezado institucional en banda superior con logo a la izquierda; datos personales en dos columnas; firma manuscrita en el tercio inferior derecho."
+}

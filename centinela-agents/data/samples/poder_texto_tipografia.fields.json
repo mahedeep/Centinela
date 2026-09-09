@@ -1,0 +1,22 @@
+{
+  "document_type": "poder",
+  "fields": {
+    "nombre": {
+      "value": "MARÍA FICTICIA PÉREZ DE PRUEBA",
+      "confidence": 0.93
+    },
+    "rut": {
+      "value": "12.345.678-5",
+      "confidence": 0.92
+    },
+    "firmante": {
+      "value": "JUAN INVENTADO SOTO",
+      "confidence": 0.88
+    },
+    "fecha_emision": {
+      "value": "20/08/2026",
+      "confidence": 0.91
+    }
+  },
+  "layout": "Título en banda superior; párrafos de cuerpo; fecha a la izquierda y firma manuscrita sobre línea en el sector inferior derecho."
+}

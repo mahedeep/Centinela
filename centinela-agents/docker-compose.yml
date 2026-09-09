@@ -1,0 +1,22 @@
+services:
+  api:
+    build: .
+    container_name: centinela-api
+    ports:
+      - "8000:8000"
+    environment:
+      # Sin .env, el servicio arranca en modo mock: útil para demos.
+      MOCK_MODE: "${MOCK_MODE:-true}"
+      SHADOW_MODE: "${SHADOW_MODE:-false}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      DATABASE_URL: "sqlite:///data/centinela.db"
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:3000}"
+      EXPORT_OPENAPI: "false"
+    env_file:
+      - path: .env
+        required: false
+    volumes:
+      # Persiste la base, las trazas y los documentos de ejemplo entre reinicios.
+      - ./data:/app/data
+      - ./reports:/app/reports
+    restart: unless-stopped

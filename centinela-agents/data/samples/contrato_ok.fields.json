@@ -1,0 +1,22 @@
+{
+  "document_type": "contrato",
+  "fields": {
+    "firmante": {
+      "value": "MARÍA FICTICIA PÉREZ DE PRUEBA",
+      "confidence": 0.92
+    },
+    "rut": {
+      "value": "12.345.678-5",
+      "confidence": 0.9
+    },
+    "fecha_emision": {
+      "value": "15/07/2026",
+      "confidence": 0.91
+    },
+    "emisor": {
+      "value": "SERVICIOS IMAGINARIOS LIMITADA",
+      "confidence": 0.89
+    }
+  },
+  "layout": "Título en banda superior; seis párrafos de cuerpo; fecha a la izquierda y firma manuscrita sobre línea en el sector inferior derecho."
+}

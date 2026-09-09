@@ -1,0 +1,2116 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Centinela · API de agentes antifraude",
+    "description": "API de agentes de **Centinela**, plataforma antifraude multimodal.\n\nDos procesos, un mismo contrato de salida (`Decision`):\n\n- `POST /api/v1/transactions/evaluate` — aprobar · validación adicional · bloquear\n- `POST /api/v1/documents/validate` — auténtico · sospechoso · falso\n\nToda decisión es explicable y trazable bajo un `trace_id`. Los casos bloqueados\ny las excepciones siempre pasan por una persona.\n\n**Datos sintéticos.** Este servicio se construyó como proyecto académico y no\ndebe procesar datos reales de clientes sin gobierno y consentimiento.\n",
+    "contact": {
+      "name": "Grupo Centinela"
+    },
+    "license": {
+      "name": "MIT"
+    },
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "tags": [
+          "salud"
+        ],
+        "summary": "Estado del servicio",
+        "operationId": "health_api_v1_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transactions/evaluate": {
+      "post": {
+        "tags": [
+          "transacciones"
+        ],
+        "summary": "Evalúa una transacción y devuelve una decisión explicable",
+        "operationId": "evaluate_api_v1_transactions_evaluate_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransactionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Decision"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transactions/evaluate/batch": {
+      "post": {
+        "tags": [
+          "transacciones"
+        ],
+        "summary": "Evalúa un lote de transacciones (replay y modo sombra)",
+        "operationId": "evaluate_batch_api_v1_transactions_evaluate_batch_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BatchTransactionInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/Decision"
+                  },
+                  "type": "array",
+                  "title": "Response Evaluate Batch Api V1 Transactions Evaluate Batch Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/transactions/rules": {
+      "get": {
+        "tags": [
+          "transacciones"
+        ],
+        "summary": "Catálogo de reglas y pesos vigentes (solo lectura)",
+        "operationId": "rules_api_v1_transactions_rules_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Rules Api V1 Transactions Rules Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/validate": {
+      "post": {
+        "tags": [
+          "documentos"
+        ],
+        "summary": "Valida un documento y determina si es auténtico, sospechoso o falso",
+        "operationId": "validate_api_v1_documents_validate_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_validate_api_v1_documents_validate_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentDecision"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/references": {
+      "post": {
+        "tags": [
+          "documentos"
+        ],
+        "summary": "Registra una firma o plantilla de referencia",
+        "operationId": "register_reference_api_v1_documents_references_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_register_reference_api_v1_documents_references_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{trace_id}/evidence": {
+      "get": {
+        "tags": [
+          "documentos"
+        ],
+        "summary": "Regiones de los hallazgos para dibujar sobre la imagen",
+        "operationId": "evidence_api_v1_documents__trace_id__evidence_get",
+        "parameters": [
+          {
+            "name": "trace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceRegionsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/documents/{trace_id}/page/{page}": {
+      "get": {
+        "tags": [
+          "documentos"
+        ],
+        "summary": "Imagen procesada de una página (solo analista/supervisor)",
+        "operationId": "page_image_api_v1_documents__trace_id__page__page__get",
+        "parameters": [
+          {
+            "name": "trace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trace Id"
+            }
+          },
+          {
+            "name": "page",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Page"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página renderizada",
+            "content": {
+              "image/png": {}
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases": {
+      "get": {
+        "tags": [
+          "casos"
+        ],
+        "summary": "Bandeja de casos",
+        "operationId": "list_cases_api_v1_cases_get",
+        "parameters": [
+          {
+            "name": "process",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "transaction",
+                    "document"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Process"
+            }
+          },
+          {
+            "name": "verdict",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Verdict"
+            }
+          },
+          {
+            "name": "requires_human_review",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Requires Human Review"
+            }
+          },
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date From"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date To"
+            }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "score",
+                "created_at"
+              ],
+              "type": "string",
+              "default": "score",
+              "title": "Order By"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CaseSummary"
+                  },
+                  "title": "Response List Cases Api V1 Cases Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/cases/{trace_id}": {
+      "get": {
+        "tags": [
+          "casos"
+        ],
+        "summary": "Detalle completo de un caso, con la traza",
+        "operationId": "get_case_api_v1_cases__trace_id__get",
+        "parameters": [
+          {
+            "name": "trace_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Trace Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CaseDetail"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/feedback": {
+      "post": {
+        "tags": [
+          "casos"
+        ],
+        "summary": "Etiqueta del analista; indexa el caso para que el agente aprenda",
+        "operationId": "post_feedback_api_v1_feedback_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Feedback"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackAck"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/metrics": {
+      "get": {
+        "tags": [
+          "métricas"
+        ],
+        "summary": "KPIs, costo y modo sombra",
+        "operationId": "metrics_api_v1_metrics_get",
+        "parameters": [
+          {
+            "name": "date_from",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date From"
+            }
+          },
+          {
+            "name": "date_to",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date-time"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Date To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MetricsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/settings": {
+      "get": {
+        "tags": [
+          "métricas"
+        ],
+        "summary": "Configuración visible (umbrales y pesos, solo lectura)",
+        "description": "Lo que el rol Supervisor puede ver en Ajustes. Ningún secreto sale por aquí.",
+        "operationId": "public_settings_api_v1_settings_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Public Settings Api V1 Settings Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BatchTransactionInput": {
+        "properties": {
+          "transactions": {
+            "items": {
+              "$ref": "#/components/schemas/TransactionInput"
+            },
+            "type": "array",
+            "maxItems": 200,
+            "minItems": 1,
+            "title": "Transactions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "transactions"
+        ],
+        "title": "BatchTransactionInput",
+        "description": "Lote para replay y modo sombra. Máximo 200 por llamada."
+      },
+      "Behavior": {
+        "properties": {
+          "tx_last_hour": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Tx Last Hour",
+            "default": 0
+          },
+          "tx_last_24h": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Tx Last 24H",
+            "default": 0
+          },
+          "failed_logins_24h": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Failed Logins 24H",
+            "default": 0
+          },
+          "session_seconds": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Session Seconds",
+            "default": 0
+          }
+        },
+        "type": "object",
+        "title": "Behavior"
+      },
+      "Body_register_reference_api_v1_documents_references_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          },
+          "document_type": {
+            "type": "string",
+            "title": "Document Type",
+            "default": "firma"
+          },
+          "label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Label",
+            "description": "Etiqueta libre, sin datos personales"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_register_reference_api_v1_documents_references_post"
+      },
+      "Body_validate_api_v1_documents_validate_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File",
+            "description": "JPG, PNG o PDF de hasta 10 MB."
+          },
+          "document_type": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Document Type"
+          },
+          "reference_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Id"
+          },
+          "expected_fields": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expected Fields",
+            "description": "JSON campo → valor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_validate_api_v1_documents_validate_post"
+      },
+      "CaseDetail": {
+        "properties": {
+          "decision": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/DocumentDecision"
+              },
+              {
+                "$ref": "#/components/schemas/Decision"
+              }
+            ],
+            "title": "Decision"
+          },
+          "inputs": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Inputs"
+          },
+          "prompts": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Prompts",
+            "description": "Prompts usados. Nunca se exponen al cliente."
+          },
+          "prompt_version": {
+            "type": "string",
+            "title": "Prompt Version",
+            "default": ""
+          },
+          "weights": {
+            "additionalProperties": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "object",
+            "title": "Weights",
+            "description": "Pesos usados y score de cada fuente. `null` = fuente sin datos."
+          },
+          "neighbors": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Neighbors"
+          },
+          "extra": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Extra"
+          },
+          "feedback": {
+            "items": {
+              "$ref": "#/components/schemas/Feedback"
+            },
+            "type": "array",
+            "title": "Feedback"
+          }
+        },
+        "type": "object",
+        "required": [
+          "decision"
+        ],
+        "title": "CaseDetail",
+        "description": "Detalle completo: decisión + traza interna (solo roles analista/supervisor).\n\n`decision` es una unión: para un caso de documento hay que devolver\n`DocumentDecision` completo —con `checks`, `fields` y `findings`—, porque la\npantalla del analista los necesita. Validarlo como `Decision` descartaría\nesos campos silenciosamente."
+      },
+      "CaseSummary": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "process": {
+            "type": "string",
+            "enum": [
+              "transaction",
+              "document"
+            ],
+            "title": "Process"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "aprobar",
+              "validacion_adicional",
+              "bloquear",
+              "autentico",
+              "sospechoso",
+              "falso"
+            ],
+            "title": "Verdict"
+          },
+          "score": {
+            "type": "number",
+            "title": "Score"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "requires_human_review": {
+            "type": "boolean",
+            "title": "Requires Human Review"
+          },
+          "shadow": {
+            "type": "boolean",
+            "title": "Shadow",
+            "default": false
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "cost_usd": {
+            "type": "number",
+            "title": "Cost Usd",
+            "default": 0.0
+          },
+          "latency_ms": {
+            "type": "integer",
+            "title": "Latency Ms",
+            "default": 0
+          },
+          "feedback_label": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "fraude_confirmado",
+                  "legitimo",
+                  "documento_falso",
+                  "documento_autentico"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Feedback Label"
+          },
+          "age_seconds": {
+            "type": "number",
+            "title": "Age Seconds",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "process",
+          "verdict",
+          "score",
+          "confidence",
+          "requires_human_review",
+          "created_at"
+        ],
+        "title": "CaseSummary",
+        "description": "Fila de la bandeja del analista."
+      },
+      "Check": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pass",
+              "fail",
+              "warn",
+              "pending"
+            ],
+            "title": "Status"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "default": ""
+          },
+          "critical": {
+            "type": "boolean",
+            "title": "Critical",
+            "description": "Si es crítico y falla, el veredicto mínimo es `sospechoso`.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "status"
+        ],
+        "title": "Check",
+        "description": "Verificación determinista ejecutada en Python, sin modelo."
+      },
+      "CustomerProfile": {
+        "properties": {
+          "segment": {
+            "type": "string",
+            "enum": [
+              "persona_natural",
+              "empresa"
+            ],
+            "title": "Segment",
+            "default": "persona_natural"
+          },
+          "risk_tier": {
+            "type": "string",
+            "enum": [
+              "bajo",
+              "medio",
+              "alto"
+            ],
+            "title": "Risk Tier",
+            "default": "medio"
+          }
+        },
+        "type": "object",
+        "title": "CustomerProfile"
+      },
+      "DailyPoint": {
+        "properties": {
+          "date": {
+            "type": "string",
+            "title": "Date"
+          },
+          "verdict": {
+            "type": "string",
+            "title": "Verdict"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "date",
+          "verdict",
+          "count"
+        ],
+        "title": "DailyPoint"
+      },
+      "Decision": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "process": {
+            "type": "string",
+            "enum": [
+              "transaction",
+              "document"
+            ],
+            "title": "Process"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "aprobar",
+              "validacion_adicional",
+              "bloquear",
+              "autentico",
+              "sospechoso",
+              "falso"
+            ],
+            "title": "Verdict"
+          },
+          "score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Score"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reasons"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "requires_human_review": {
+            "type": "boolean",
+            "title": "Requires Human Review",
+            "default": false
+          },
+          "shadow": {
+            "type": "boolean",
+            "title": "Shadow",
+            "description": "true si SHADOW_MODE forzó el veredicto a `aprobar`.",
+            "default": false
+          },
+          "explanation_customer": {
+            "type": "string",
+            "title": "Explanation Customer",
+            "description": "Texto breve y amable. Jamás menciona reglas, umbrales, modelos, scores ni hallazgos forenses.",
+            "default": ""
+          },
+          "explanation_analyst": {
+            "type": "string",
+            "title": "Explanation Analyst",
+            "description": "Texto técnico para el analista.",
+            "default": ""
+          },
+          "model": {
+            "type": "string",
+            "title": "Model",
+            "default": ""
+          },
+          "tokens_in": {
+            "type": "integer",
+            "title": "Tokens In",
+            "default": 0
+          },
+          "tokens_out": {
+            "type": "integer",
+            "title": "Tokens Out",
+            "default": 0
+          },
+          "cost_usd": {
+            "type": "number",
+            "title": "Cost Usd",
+            "default": 0.0
+          },
+          "latency_ms": {
+            "type": "integer",
+            "title": "Latency Ms",
+            "default": 0
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "process",
+          "verdict",
+          "score",
+          "confidence"
+        ],
+        "title": "Decision",
+        "description": "Salida única de ambos procesos."
+      },
+      "DestinationAccount": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "bank": {
+            "type": "string",
+            "title": "Bank",
+            "default": ""
+          },
+          "is_new_beneficiary": {
+            "type": "boolean",
+            "title": "Is New Beneficiary",
+            "default": false
+          },
+          "country": {
+            "type": "string",
+            "title": "Country",
+            "default": "CL"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "title": "DestinationAccount"
+      },
+      "Device": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id",
+            "default": ""
+          },
+          "is_new_device": {
+            "type": "boolean",
+            "title": "Is New Device",
+            "default": false
+          },
+          "os": {
+            "type": "string",
+            "title": "Os",
+            "default": ""
+          },
+          "ip_country": {
+            "type": "string",
+            "title": "Ip Country",
+            "default": "CL"
+          },
+          "vpn": {
+            "type": "boolean",
+            "title": "Vpn",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "Device"
+      },
+      "DocumentDecision": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "process": {
+            "type": "string",
+            "enum": [
+              "transaction",
+              "document"
+            ],
+            "title": "Process"
+          },
+          "verdict": {
+            "type": "string",
+            "enum": [
+              "aprobar",
+              "validacion_adicional",
+              "bloquear",
+              "autentico",
+              "sospechoso",
+              "falso"
+            ],
+            "title": "Verdict"
+          },
+          "score": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Score"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "reasons": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Reasons"
+          },
+          "evidence": {
+            "items": {
+              "$ref": "#/components/schemas/Evidence"
+            },
+            "type": "array",
+            "title": "Evidence"
+          },
+          "requires_human_review": {
+            "type": "boolean",
+            "title": "Requires Human Review",
+            "default": false
+          },
+          "shadow": {
+            "type": "boolean",
+            "title": "Shadow",
+            "description": "true si SHADOW_MODE forzó el veredicto a `aprobar`.",
+            "default": false
+          },
+          "explanation_customer": {
+            "type": "string",
+            "title": "Explanation Customer",
+            "description": "Texto breve y amable. Jamás menciona reglas, umbrales, modelos, scores ni hallazgos forenses.",
+            "default": ""
+          },
+          "explanation_analyst": {
+            "type": "string",
+            "title": "Explanation Analyst",
+            "description": "Texto técnico para el analista.",
+            "default": ""
+          },
+          "model": {
+            "type": "string",
+            "title": "Model",
+            "default": ""
+          },
+          "tokens_in": {
+            "type": "integer",
+            "title": "Tokens In",
+            "default": 0
+          },
+          "tokens_out": {
+            "type": "integer",
+            "title": "Tokens Out",
+            "default": 0
+          },
+          "cost_usd": {
+            "type": "number",
+            "title": "Cost Usd",
+            "default": 0.0
+          },
+          "latency_ms": {
+            "type": "integer",
+            "title": "Latency Ms",
+            "default": 0
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Created At"
+          },
+          "document_type_detected": {
+            "type": "string",
+            "enum": [
+              "cedula",
+              "comprobante_domicilio",
+              "contrato",
+              "poder",
+              "liquidacion",
+              "firma",
+              "otro"
+            ],
+            "title": "Document Type Detected",
+            "default": "otro"
+          },
+          "fields": {
+            "additionalProperties": {
+              "$ref": "#/components/schemas/FieldValue"
+            },
+            "type": "object",
+            "title": "Fields"
+          },
+          "checks": {
+            "items": {
+              "$ref": "#/components/schemas/Check"
+            },
+            "type": "array",
+            "title": "Checks"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "pages_analyzed": {
+            "type": "integer",
+            "title": "Pages Analyzed",
+            "default": 1
+          },
+          "image_quality": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Image Quality",
+            "default": 1.0
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "process",
+          "verdict",
+          "score",
+          "confidence"
+        ],
+        "title": "DocumentDecision",
+        "description": "`Decision` + lo específico del proceso B.\n\nVive en este módulo, junto a `Decision` y `CaseDetail`, porque los tres se\nreferencian entre sí: `CaseDetail.decision` debe poder ser un\n`DocumentDecision` completo para que la pantalla del analista reciba\n`checks`, `fields` y `findings`."
+      },
+      "Evidence": {
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "rule",
+              "similarity",
+              "vision",
+              "metadata",
+              "consistency"
+            ],
+            "title": "Type"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name",
+            "description": "Identificador estable de la señal, en inglés."
+          },
+          "value": {
+            "title": "Value",
+            "description": "Valor observado (bool, número, texto o lista)."
+          },
+          "weight": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Weight",
+            "description": "Peso relativo dentro de su fuente."
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail",
+            "description": "Explicación en una frase, en español.",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "type",
+          "name",
+          "value",
+          "weight"
+        ],
+        "title": "Evidence",
+        "description": "Una señal que sustenta la decisión. El analista las ve ordenadas por peso."
+      },
+      "EvidenceRegionsResponse": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "pages_analyzed": {
+            "type": "integer",
+            "title": "Pages Analyzed"
+          },
+          "image_quality": {
+            "type": "number",
+            "title": "Image Quality"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/Finding"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "artifacts_available": {
+            "type": "boolean",
+            "title": "Artifacts Available",
+            "description": "false cuando la retención ya borró las imágenes procesadas.",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "pages_analyzed",
+          "image_quality"
+        ],
+        "title": "EvidenceRegionsResponse",
+        "description": "Regiones que el front dibuja como recuadros sobre la imagen."
+      },
+      "Feedback": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "label": {
+            "type": "string",
+            "enum": [
+              "fraude_confirmado",
+              "legitimo",
+              "documento_falso",
+              "documento_autentico"
+            ],
+            "title": "Label"
+          },
+          "analyst": {
+            "type": "string",
+            "minLength": 1,
+            "title": "Analyst",
+            "description": "Identificador del analista."
+          },
+          "comment": {
+            "type": "string",
+            "title": "Comment",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "label",
+          "analyst"
+        ],
+        "title": "Feedback",
+        "description": "Etiqueta del analista. Cierra el ciclo de aprendizaje: indexa el caso."
+      },
+      "FeedbackAck": {
+        "properties": {
+          "trace_id": {
+            "type": "string",
+            "title": "Trace Id"
+          },
+          "label": {
+            "type": "string",
+            "enum": [
+              "fraude_confirmado",
+              "legitimo",
+              "documento_falso",
+              "documento_autentico"
+            ],
+            "title": "Label"
+          },
+          "indexed": {
+            "type": "boolean",
+            "title": "Indexed",
+            "description": "true si el caso se indexó en el vector store."
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "trace_id",
+          "label",
+          "indexed"
+        ],
+        "title": "FeedbackAck"
+      },
+      "FieldValue": {
+        "properties": {
+          "value": {
+            "type": "string",
+            "title": "Value",
+            "default": ""
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence",
+            "default": 0.0
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "vision",
+              "ocr",
+              "metadata",
+              "expected"
+            ],
+            "title": "Source",
+            "default": "vision"
+          }
+        },
+        "type": "object",
+        "title": "FieldValue",
+        "description": "Campo extraído de un documento, con su confianza."
+      },
+      "Finding": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "detail": {
+            "type": "string",
+            "title": "Detail"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "region": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/Region"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "detail",
+          "confidence"
+        ],
+        "title": "Finding",
+        "description": "Hallazgo forense con región y confianza (proceso de documentos)."
+      },
+      "Geo": {
+        "properties": {
+          "lat": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lat"
+          },
+          "lon": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Lon"
+          },
+          "distance_from_home_km": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Distance From Home Km",
+            "default": 0.0
+          }
+        },
+        "type": "object",
+        "title": "Geo"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": [
+              "ok",
+              "degraded"
+            ],
+            "title": "Status",
+            "default": "ok"
+          },
+          "mock_mode": {
+            "type": "boolean",
+            "title": "Mock Mode"
+          },
+          "shadow_mode": {
+            "type": "boolean",
+            "title": "Shadow Mode",
+            "default": false
+          },
+          "version": {
+            "type": "string",
+            "title": "Version",
+            "default": ""
+          },
+          "openai_configured": {
+            "type": "boolean",
+            "title": "Openai Configured",
+            "default": false
+          },
+          "models": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Models"
+          }
+        },
+        "type": "object",
+        "required": [
+          "mock_mode"
+        ],
+        "title": "HealthResponse"
+      },
+      "MetricsResponse": {
+        "properties": {
+          "generated_at": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Generated At"
+          },
+          "total_volume": {
+            "type": "integer",
+            "title": "Total Volume",
+            "default": 0
+          },
+          "total_cost_usd": {
+            "type": "number",
+            "title": "Total Cost Usd",
+            "default": 0.0
+          },
+          "cost_per_event_usd": {
+            "type": "number",
+            "title": "Cost Per Event Usd",
+            "default": 0.0
+          },
+          "feedback_count": {
+            "type": "integer",
+            "title": "Feedback Count",
+            "default": 0
+          },
+          "estimated_accuracy": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Estimated Accuracy",
+            "description": "Precisión sobre los casos que tienen feedback."
+          },
+          "shadow_would_block": {
+            "type": "integer",
+            "title": "Shadow Would Block",
+            "default": 0
+          },
+          "shadow_approved": {
+            "type": "integer",
+            "title": "Shadow Approved",
+            "default": 0
+          },
+          "by_process": {
+            "items": {
+              "$ref": "#/components/schemas/ProcessMetrics"
+            },
+            "type": "array",
+            "title": "By Process"
+          },
+          "by_model": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "By Model"
+          },
+          "top_evidence": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Top Evidence"
+          },
+          "timeseries": {
+            "items": {
+              "$ref": "#/components/schemas/DailyPoint"
+            },
+            "type": "array",
+            "title": "Timeseries"
+          }
+        },
+        "type": "object",
+        "title": "MetricsResponse"
+      },
+      "OriginAccount": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "age_days": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Age Days",
+            "description": "Antigüedad de la cuenta en días."
+          },
+          "avg_monthly_amount": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Avg Monthly Amount",
+            "description": "Monto promedio mensual, en CLP."
+          },
+          "country": {
+            "type": "string",
+            "title": "Country",
+            "default": "CL"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "age_days",
+          "avg_monthly_amount"
+        ],
+        "title": "OriginAccount"
+      },
+      "ProcessMetrics": {
+        "properties": {
+          "process": {
+            "type": "string",
+            "enum": [
+              "transaction",
+              "document"
+            ],
+            "title": "Process"
+          },
+          "volume": {
+            "type": "integer",
+            "title": "Volume",
+            "default": 0
+          },
+          "block_rate": {
+            "type": "number",
+            "title": "Block Rate",
+            "default": 0.0
+          },
+          "human_review_rate": {
+            "type": "number",
+            "title": "Human Review Rate",
+            "default": 0.0
+          },
+          "latency_p50_ms": {
+            "type": "number",
+            "title": "Latency P50 Ms",
+            "default": 0.0
+          },
+          "latency_p95_ms": {
+            "type": "number",
+            "title": "Latency P95 Ms",
+            "default": 0.0
+          },
+          "cost_usd": {
+            "type": "number",
+            "title": "Cost Usd",
+            "default": 0.0
+          },
+          "cost_per_event_usd": {
+            "type": "number",
+            "title": "Cost Per Event Usd",
+            "default": 0.0
+          },
+          "verdicts": {
+            "items": {
+              "$ref": "#/components/schemas/VerdictCount"
+            },
+            "type": "array",
+            "title": "Verdicts"
+          }
+        },
+        "type": "object",
+        "required": [
+          "process"
+        ],
+        "title": "ProcessMetrics"
+      },
+      "ReferenceResponse": {
+        "properties": {
+          "reference_id": {
+            "type": "string",
+            "title": "Reference Id"
+          },
+          "document_type": {
+            "type": "string",
+            "enum": [
+              "cedula",
+              "comprobante_domicilio",
+              "contrato",
+              "poder",
+              "liquidacion",
+              "firma",
+              "otro"
+            ],
+            "title": "Document Type"
+          },
+          "stored_at": {
+            "type": "string",
+            "title": "Stored At"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "default": ""
+          }
+        },
+        "type": "object",
+        "required": [
+          "reference_id",
+          "document_type",
+          "stored_at"
+        ],
+        "title": "ReferenceResponse",
+        "description": "Respuesta al registrar una firma o plantilla de referencia."
+      },
+      "Region": {
+        "properties": {
+          "page": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Page",
+            "default": 1
+          },
+          "x": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "X"
+          },
+          "y": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Y"
+          },
+          "width": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Width"
+          },
+          "height": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Height"
+          }
+        },
+        "type": "object",
+        "required": [
+          "x",
+          "y",
+          "width",
+          "height"
+        ],
+        "title": "Region",
+        "description": "Región normalizada (0-1) sobre la imagen, para dibujar recuadros en el front."
+      },
+      "TransactionInput": {
+        "properties": {
+          "transaction_id": {
+            "type": "string",
+            "title": "Transaction Id"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "title": "Timestamp"
+          },
+          "amount": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Amount"
+          },
+          "currency": {
+            "type": "string",
+            "title": "Currency",
+            "default": "CLP"
+          },
+          "channel": {
+            "type": "string",
+            "enum": [
+              "app_movil",
+              "web",
+              "cajero",
+              "sucursal",
+              "call_center",
+              "api"
+            ],
+            "title": "Channel",
+            "default": "app_movil"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "transferencia",
+              "pago",
+              "retiro",
+              "compra"
+            ],
+            "title": "Type",
+            "default": "transferencia"
+          },
+          "origin_account": {
+            "$ref": "#/components/schemas/OriginAccount"
+          },
+          "destination_account": {
+            "$ref": "#/components/schemas/DestinationAccount"
+          },
+          "device": {
+            "$ref": "#/components/schemas/Device"
+          },
+          "geo": {
+            "$ref": "#/components/schemas/Geo"
+          },
+          "behavior": {
+            "$ref": "#/components/schemas/Behavior"
+          },
+          "customer_profile": {
+            "$ref": "#/components/schemas/CustomerProfile"
+          }
+        },
+        "type": "object",
+        "required": [
+          "transaction_id",
+          "timestamp",
+          "amount",
+          "origin_account",
+          "destination_account"
+        ],
+        "title": "TransactionInput",
+        "description": "Entrada del proceso A. Los identificadores son opacos (no hay PII).",
+        "example": {
+          "amount": 1250000,
+          "behavior": {
+            "failed_logins_24h": 2,
+            "session_seconds": 40,
+            "tx_last_24h": 7,
+            "tx_last_hour": 3
+          },
+          "channel": "app_movil",
+          "currency": "CLP",
+          "customer_profile": {
+            "risk_tier": "medio",
+            "segment": "persona_natural"
+          },
+          "destination_account": {
+            "bank": "OtroBanco",
+            "country": "CL",
+            "id": "ACC-7781",
+            "is_new_beneficiary": true
+          },
+          "device": {
+            "id": "DEV-55",
+            "ip_country": "CL",
+            "is_new_device": true,
+            "os": "Android",
+            "vpn": false
+          },
+          "geo": {
+            "distance_from_home_km": 3.2,
+            "lat": -33.45,
+            "lon": -70.66
+          },
+          "origin_account": {
+            "age_days": 1450,
+            "avg_monthly_amount": 900000,
+            "country": "CL",
+            "id": "ACC-1001"
+          },
+          "timestamp": "2026-09-08T14:32:10-03:00",
+          "transaction_id": "TX-000123",
+          "type": "transferencia"
+        }
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "VerdictCount": {
+        "properties": {
+          "verdict": {
+            "type": "string",
+            "title": "Verdict"
+          },
+          "count": {
+            "type": "integer",
+            "title": "Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "verdict",
+          "count"
+        ],
+        "title": "VerdictCount"
+      }
+    }
+  }
+}
