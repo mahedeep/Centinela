@@ -37,6 +37,7 @@ npm run lint             # solo chequeo de tipos
 |---|---|---|
 | `VITE_API_BASE_URL` | `http://localhost:8000` | URL base de la API de agentes |
 | `VITE_DEMO_MODE` | `false` | `true` arranca en modo demo, sin API |
+| `VITE_AGENTS_REPO_URL` | vacío | Repositorio enlazado desde Ajustes. Vacío = sin enlace |
 | `VITE_SUPABASE_URL` | vacío | Opcional. Habilita el acceso con cuenta |
 | `VITE_SUPABASE_ANON_KEY` | vacío | Opcional. Clave pública de Supabase |
 

@@ -1,6 +1,7 @@
 # Contrato de la API
 
-Base: `{{API_BASE_URL}}` · versión `/api/v1` · todas las respuestas en JSON UTF-8.
+Base: la URL donde tengas desplegada la API (en local, `http://localhost:8000`) · versión `/api/v1` · todas las respuestas en
+JSON UTF-8.
 
 Este documento describe los endpoints con ejemplos **capturados de la API real**
 en modo mock. El contrato formal, con todos los esquemas, está en `openapi.json`

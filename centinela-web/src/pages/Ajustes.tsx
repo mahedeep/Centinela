@@ -12,7 +12,10 @@ import { useApiStatus } from '../hooks/useApiStatus'
 import type { PublicSettings } from '../lib/types'
 import { Spinner } from '../components/states'
 
-const REPO_URL = 'https://github.com/{{USUARIO}}/centinela-agents'
+// URL del repositorio de agentes. Se configura en `.env`
+// (`VITE_AGENTS_REPO_URL`); si no está, la tarjeta lo explica en vez de
+// ofrecer un enlace roto.
+const REPO_URL = (import.meta.env.VITE_AGENTS_REPO_URL || '').trim()
 
 export function Ajustes() {
   const { health, reachable, checking, refresh } = useApiStatus()
@@ -192,14 +195,21 @@ export function Ajustes() {
         <p className="text-sm text-slate-600">
           Toda la inteligencia vive en la API. El front nunca llama a OpenAI.
         </p>
-        <a
-          href={REPO_URL}
-          target="_blank"
-          rel="noreferrer"
-          className="btn-secondary mt-3 inline-flex"
-        >
-          Abrir el repositorio
-        </a>
+        {REPO_URL ? (
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="btn-secondary mt-3 inline-flex"
+          >
+            Abrir el repositorio
+          </a>
+        ) : (
+          <p className="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
+            Define <code>VITE_AGENTS_REPO_URL</code> en el archivo <code>.env</code> para
+            enlazar aquí el repositorio.
+          </p>
+        )}
       </section>
     </div>
   )
